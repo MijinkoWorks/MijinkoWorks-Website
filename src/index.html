@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mijinko Works</title>
+  <meta name="description" content="Mijinko Worksはスマホ・PC向けゲームを制作するインディーゲーム開発プロジェクトです。">
+  <link rel="canonical" href="https://mijinkoworks.com/">
+  <!-- 言語別ページ。x-default は日本語 / Language versions; x-default is Japanese -->
+  <link rel="alternate" hreflang="ja" href="https://mijinkoworks.com/">
+  <link rel="alternate" hreflang="en" href="https://mijinkoworks.com/en/">
+  <link rel="alternate" hreflang="zh-CN" href="https://mijinkoworks.com/zh-cn/">
+  <link rel="alternate" hreflang="zh-TW" href="https://mijinkoworks.com/zh-tw/">
+  <link rel="alternate" hreflang="ko" href="https://mijinkoworks.com/ko/">
+  <link rel="alternate" hreflang="x-default" href="https://mijinkoworks.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mijinko Works">
+  <meta property="og:title" content="Mijinko Works">
+  <meta property="og:description" content="Mijinko Worksはスマホ・PC向けゲームを制作するインディーゲーム開発プロジェクトです。">
+  <meta property="og:url" content="https://mijinkoworks.com/">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <!-- SNSシェア時のサムネイル（1200x630・assets/logo/og-image.jpg）。絶対URLで指定する必要があるため公開ドメイン前提 -->
+  <meta property="og:image" content="https://mijinkoworks.com/assets/logo/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon（ブラウザのタブ）: ヘッダー左上と同じ元アイコン -->
+  <link rel="icon" type="image/png" href="assets/icons/Mijinko%20Works%20Icon.png">
+  <!-- ホーム画面・デスクトップ用アイコン（元アイコンを正方形に余白を付けて書き出したもの）とマニフェスト -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/app/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#C9A46B">
+
+  <!-- Webフォント（Kiwi Maru）: core は現在のページの文字だけを含む小さなファイルなので先読みする -->
+  <link rel="preload" href="assets/fonts/kiwi-maru-core.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!--
+    イントロ（ロゴGIFアニメーション）
+    - 表示制御は js/main.js（再生後にゆっくりフェードアウト / クリック・Escで即スキップ / 同一セッション中は1回だけ）
+    - GIFはループ再生されるため、最終フレームと同じ静止画（_end.png）を下に重ねておき、
+      フェード開始時にGIFを隠して静止画に切り替える（見た目は変わらない）
+    - JavaScript無効時は noscript のCSSで非表示にし、本文がそのまま読める
+    - OSの「視差効果を減らす」設定が有効な場合も表示しない
+  -->
+  <noscript><style>.intro { display: none; }</style></noscript>
+  <div class="intro" id="intro" role="dialog" aria-label="Mijinko Works イントロ">
+    <div class="intro__stage">
+      <img class="intro__logo intro__logo--end" src="assets/logo/Mijinko_Works_Logo_Animation_end.png" alt="" width="1021" height="198" aria-hidden="true">
+      <img class="intro__logo intro__logo--gif" src="assets/logo/Mijinko_Works_Logo_Animation.gif" alt="Mijinko Works" width="1021" height="198">
+    </div>
+    <button class="intro__skip" type="button">スキップ</button>
+  </div>
+  <script>
+    /* 描画前に判定し、2回目以降の表示や「視差効果を減らす」設定時はイントロを出さない（詳細は js/main.js） */
+    (function () {
+      var intro = document.getElementById('intro');
+      var seen = false;
+      try { seen = sessionStorage.getItem('mw-intro-seen') === '1'; } catch (e) {}
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (seen || reduce) {
+        intro.parentNode.removeChild(intro);
+      } else {
+        document.documentElement.classList.add('is-intro');
+      }
+    })();
+  </script>
+
+  <a class="skip-link" href="#main">本文へ移動</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="./" aria-label="Mijinko Works トップページ">
+        <img src="assets/icons/mijinko-works-icon-transparent.png" alt="Mijinko Works" width="355" height="392">
+      </a>
+      <nav class="site-nav" aria-label="サイト内ナビゲーション">
+        <ul class="site-nav__list">
+          <li><a href="#games">Games</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#social">Social</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <!-- 言語切り替え: ヘッダーには現在の言語だけを出し、押すと一覧（国旗＋言語名）が開く。JavaScript 無しでも <details> で動く。
+           国旗（flag-icons・MIT）は必ず言語名と併記する（言語と旗は 1 対 1 ではない） -->
+      <details class="lang-switch">
+        <summary class="lang-switch__current" aria-label="言語 / Language"><img class="lang-switch__flag" src="assets/flags/jp.svg" alt="" width="640" height="480"><span lang="ja">日本語</span><span class="lang-switch__chevron" aria-hidden="true"></span></summary>
+        <ul class="lang-switch__list">
+          <li><a class="lang-switch__link" href="./" lang="ja" hreflang="ja" aria-current="page"><img class="lang-switch__flag" src="assets/flags/jp.svg" alt="" width="640" height="480"><span>日本語</span></a></li>
+          <li><a class="lang-switch__link" href="en/" lang="en" hreflang="en"><img class="lang-switch__flag" src="assets/flags/us.svg" alt="" width="640" height="480"><span>English</span></a></li>
+          <li><a class="lang-switch__link" href="zh-cn/" lang="zh-CN" hreflang="zh-CN"><img class="lang-switch__flag" src="assets/flags/cn.svg" alt="" width="640" height="480"><span>简体中文</span></a></li>
+          <li><a class="lang-switch__link" href="zh-tw/" lang="zh-TW" hreflang="zh-TW"><img class="lang-switch__flag" src="assets/flags/tw.svg" alt="" width="640" height="480"><span>繁體中文</span></a></li>
+          <li><a class="lang-switch__link" href="ko/" lang="ko" hreflang="ko"><img class="lang-switch__flag" src="assets/flags/kr.svg" alt="" width="640" height="480"><span>한국어</span></a></li>
+        </ul>
+      </details>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <h1 class="hero__title" id="hero-title">
+          <img class="hero__logo" src="assets/logo/Mijinko_Works_logo_transparent.png" alt="Mijinko Works" width="960" height="171">
+        </h1>
+        <p class="hero__lead">スマホ・PC向けゲームを制作しています。</p>
+        <p class="hero__sub" lang="en">Indie Game Developer from Japan.</p>
+      </div>
+    </section>
+
+    <!-- Games -->
+    <section class="section section--games" id="games" aria-labelledby="games-title">
+      <div class="container">
+        <h2 class="section__title" id="games-title">Games</h2>
+
+        <ul class="game-list">
+
+          <!-- ミジナメの池開拓記 -->
+          <li class="game-card">
+            <!-- 装飾: 画像を紙に貼るマスキングテープ（CSS背景・角度は :nth-child で固定）。将来のゴム印は .game-card__stamp としてここに追加する -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="assets/games/mijiname-pond-frontier/icon.webp" type="image/webp">
+                <img src="assets/games/mijiname-pond-frontier/icon.png" alt="ミジナメの池開拓記" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">ミジナメの池開拓記</h3>
+              <p class="game-card__desc">粘液で線を引いて縄張りを広げる、陣取りアクションパズル。</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: ストア公開後にリンクを追加（App Store / Google Play / Steam など）。存在しないURLは設定しない -->
+            </div>
+          </li>
+
+          <!-- ねこならべ五目 -->
+          <li class="game-card">
+            <!-- 装飾: 画像を紙に貼るマスキングテープ（CSS背景・角度は :nth-child で固定）。将来のゴム印は .game-card__stamp としてここに追加する -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="assets/games/neko-narabe-gomoku/icon.webp" type="image/webp">
+                <img src="assets/games/neko-narabe-gomoku/icon.png" alt="ねこならべ五目" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <!-- TODO: 説明文・ステータスを確定後に更新 -->
+              <h3 class="game-card__title">ねこならべ五目</h3>
+              <p class="game-card__desc">ねこを並べて遊ぶ、シンプルな五目並べ。</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: ストア公開後にリンクを追加（App Store / Google Play など）。存在しないURLは設定しない -->
+            </div>
+          </li>
+
+          <!-- ねこならべリバーシ -->
+          <li class="game-card">
+            <!-- 装飾: 画像を紙に貼るマスキングテープ（CSS背景・角度は :nth-child で固定）。将来のゴム印は .game-card__stamp としてここに追加する -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="assets/games/neko-narabe-reversi/icon.webp" type="image/webp">
+                <img src="assets/games/neko-narabe-reversi/icon.png" alt="ねこならべリバーシ" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <!-- TODO: 説明文・ステータスを確定後に更新 -->
+              <h3 class="game-card__title">ねこならべリバーシ</h3>
+              <p class="game-card__desc">ねこを並べて遊ぶ、シンプルなリバーシ。</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: ストア公開後にリンクを追加（App Store / Google Play など）。存在しないURLは設定しない -->
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- About -->
+    <!-- About / Contact はセクション全体をガムテープ（packing_tape_01 / 02）の上に載せる -->
+    <section class="section section--tape section--tape-01" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 class="section__title" id="about-title">About</h2>
+        <p class="about__text">
+          Mijinko Worksは、スマホ・PC向けゲームを制作する<br class="br-pc">
+          インディーゲーム開発プロジェクトです。
+        </p>
+        <p class="about__text">
+          小さくても、最後まで遊べるゲームを丁寧に制作していきます。
+        </p>
+      </div>
+    </section>
+
+    <!-- Social -->
+    <section class="section" id="social" aria-labelledby="social-title">
+      <div class="container">
+        <h2 class="section__title" id="social-title">Social</h2>
+        <!-- アイコンは Tabler Icons（brand-*）を白抜きにしたもの。サービス名はテキストで併記する -->
+        <ul class="social-list">
+          <li>
+            <a class="social-link" href="https://x.com/MijinkoWorks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-x-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">X</span>
+              <span class="social-link__handle">@MijinkoWorks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.youtube.com/@MijinkoWorks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-youtube-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">YouTube</span>
+              <span class="social-link__handle">@MijinkoWorks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.instagram.com/mijinkoworks/" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-instagram-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Instagram</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.tiktok.com/@mijinkoworks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-tiktok-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">TikTok</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.threads.net/@mijinkoworks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-threads-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Threads</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://bsky.app/profile/mijinkoworks.bsky.social" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="assets/icons/brand-bluesky-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Bluesky</span>
+              <span class="social-link__handle">@mijinkoworks.bsky.social</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section--tape section--tape-02" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <h2 class="section__title" id="contact-title">Contact</h2>
+        <p class="contact__text">お問い合わせはこちら</p>
+        <p class="contact__mail">
+          <a class="contact__mail-link" href="mailto:contact@mijinkoworks.com" aria-label="メールで問い合わせる">
+            <img src="assets/icons/mail-white.png" alt="" width="240" height="240">
+          </a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+        <a href="privacy/">Privacy Policy</a>
+      </nav>
+      <p class="site-footer__copy">
+        &copy; <span class="js-year">2026</span> Mijinko Works
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

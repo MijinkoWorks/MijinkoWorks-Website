@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy | Mijinko Works</title>
+  <meta name="description" content="Mijinko Works가 제공하는 게임 및 웹사이트의 개인정보 처리방침입니다.">
+  <link rel="canonical" href="https://mijinkoworks.com/ko/privacy/">
+  <!-- 言語別ページ。x-default は日本語 / Language versions; x-default is Japanese -->
+  <link rel="alternate" hreflang="ja" href="https://mijinkoworks.com/privacy/">
+  <link rel="alternate" hreflang="en" href="https://mijinkoworks.com/en/privacy/">
+  <link rel="alternate" hreflang="zh-CN" href="https://mijinkoworks.com/zh-cn/privacy/">
+  <link rel="alternate" hreflang="zh-TW" href="https://mijinkoworks.com/zh-tw/privacy/">
+  <link rel="alternate" hreflang="ko" href="https://mijinkoworks.com/ko/privacy/">
+  <link rel="alternate" hreflang="x-default" href="https://mijinkoworks.com/privacy/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mijinko Works">
+  <meta property="og:title" content="Privacy Policy | Mijinko Works">
+  <meta property="og:description" content="Mijinko Works가 제공하는 게임 및 웹사이트의 개인정보 처리방침입니다.">
+  <meta property="og:url" content="https://mijinkoworks.com/ko/privacy/">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <!-- Share thumbnail (1200x630, assets/logo/og-image.jpg). Must be an absolute URL, so it assumes the production domain -->
+  <meta property="og:image" content="https://mijinkoworks.com/assets/logo/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon (browser tab): same source icon as the header -->
+  <link rel="icon" type="image/png" href="../../assets/icons/Mijinko%20Works%20Icon.png">
+  <!-- Home screen / desktop icons and web app manifest -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/app/apple-touch-icon.png">
+  <link rel="manifest" href="../../site.webmanifest">
+  <meta name="theme-color" content="#C9A46B">
+
+  <!-- Web font (Noto Sans KR, this language only): core contains just the characters on this page, so preload it -->
+  <link rel="preload" href="../../assets/fonts/noto-sans-kr-core.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../css/fonts.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-privacy lang-ko">
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="../" aria-label="Mijinko Works 홈">
+        <img src="../../assets/icons/mijinko-works-icon-transparent.png" alt="Mijinko Works" width="355" height="392">
+      </a>
+      <nav class="site-nav" aria-label="사이트 내비게이션">
+        <ul class="site-nav__list">
+          <li><a href="../#games">Games</a></li>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#social">Social</a></li>
+          <li><a href="../#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <!-- 言語切り替え: ヘッダーには現在の言語だけを出し、押すと一覧（国旗＋言語名）が開く。JavaScript 無しでも <details> で動く。
+           国旗（flag-icons・MIT）は必ず言語名と併記する（言語と旗は 1 対 1 ではない） -->
+      <details class="lang-switch">
+        <summary class="lang-switch__current" aria-label="言語 / Language"><img class="lang-switch__flag" src="../../assets/flags/kr.svg" alt="" width="640" height="480"><span lang="ko">한국어</span><span class="lang-switch__chevron" aria-hidden="true"></span></summary>
+        <ul class="lang-switch__list">
+          <li><a class="lang-switch__link" href="../../privacy/" lang="ja" hreflang="ja"><img class="lang-switch__flag" src="../../assets/flags/jp.svg" alt="" width="640" height="480"><span>日本語</span></a></li>
+          <li><a class="lang-switch__link" href="../../en/privacy/" lang="en" hreflang="en"><img class="lang-switch__flag" src="../../assets/flags/us.svg" alt="" width="640" height="480"><span>English</span></a></li>
+          <li><a class="lang-switch__link" href="../../zh-cn/privacy/" lang="zh-CN" hreflang="zh-CN"><img class="lang-switch__flag" src="../../assets/flags/cn.svg" alt="" width="640" height="480"><span>简体中文</span></a></li>
+          <li><a class="lang-switch__link" href="../../zh-tw/privacy/" lang="zh-TW" hreflang="zh-TW"><img class="lang-switch__flag" src="../../assets/flags/tw.svg" alt="" width="640" height="480"><span>繁體中文</span></a></li>
+          <li><a class="lang-switch__link" href="./" lang="ko" hreflang="ko" aria-current="page"><img class="lang-switch__flag" src="../../assets/flags/kr.svg" alt="" width="640" height="480"><span>한국어</span></a></li>
+        </ul>
+      </details>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="page">
+      <div class="container container--narrow">
+        <h1 class="page__title">Privacy Policy</h1>
+        <p class="page__updated">개인정보 처리방침</p>
+
+        <div class="policy">
+          <!--
+            This page is a translation of the Japanese Privacy Policy (/privacy/), which is the official text.
+            When the Japanese text changes, re-translate this page directly from the Japanese (never via another translation).
+            Section numbers are added automatically by a CSS counter (.policy__section).
+          -->
+          <p class="policy__lead">Mijinko Works(이하 “당사”)는 당사가 제공하는 애플리케이션(이하 “본 앱”)에서 이용자 정보를 처리하는 방법에 관하여 다음과 같이 개인정보 처리방침을 정합니다.</p>
+          <p class="policy__note">본 한국어 번역문은 이용자의 편의를 위해 제공됩니다. 일본어판이 공식 문서이며, 번역문과 일본어판의 내용이 서로 다른 경우 일본어판이 우선합니다.</p>
+
+          <section class="page__section policy__section" aria-labelledby="pp-collected">
+            <h2 id="pp-collected">수집 및 이용되는 정보</h2>
+            <p>본 앱은 광고 제공을 위해 Google LLC가 제공하는 Google AdMob 및 Google Mobile Ads SDK를 사용합니다.</p>
+            <p>Google Mobile Ads SDK를 통해 광고 제공, 광고 효과 측정, 서비스 개선, 분석 및 부정행위 방지 등의 목적으로 다음 정보가 자동으로 수집되거나 처리될 수 있습니다.</p>
+            <ul>
+              <li>IP 주소</li>
+              <li>IP 주소 등을 통해 추정되는 대략적인 위치 정보</li>
+              <li>앱 실행, 탭, 동영상 광고 재생 등 본 앱 및 광고와의 상호작용 정보</li>
+              <li>본 앱 및 광고 SDK의 작동 상태, 실행 시간, 충돌 및 멈춤 등에 관한 진단 및 성능 정보</li>
+              <li>기기 식별자</li>
+              <li>광고 식별자</li>
+              <li>App Set ID 및 앱, 기기 또는 계정과 관련된 기타 식별 정보(해당되는 경우)</li>
+              <li>표시된 광고 및 광고와의 상호작용에 관한 정보</li>
+            </ul>
+            <p>이러한 정보를 당사가 모두 직접 수집하거나 저장하는 것은 아니며, Google을 포함한 광고 서비스 제공업체가 처리할 수 있습니다.</p>
+            <p>Google의 정보 처리 방식에 대한 자세한 내용은 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google 개인정보처리방침</a> 및 <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google 광고 관련 정책</a>을 확인하시기 바랍니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-ads">
+            <h2 id="pp-ads">광고 제공</h2>
+            <p>본 앱은 서비스를 무료로 제공하고 운영을 유지하기 위한 목적으로 Google AdMob 광고를 표시할 수 있습니다.</p>
+            <p>이용자의 동의 상태, 이용 지역, 기기 설정, 관련 법률 및 기타 조건에 따라 개인 맞춤형 광고, 비개인 맞춤형 광고, 제한된 광고(Limited Ads) 또는 기타 적용 가능한 광고 제공 방식이 사용될 수 있습니다.</p>
+            <p>광고 제공 및 광고 관련 데이터 처리에는 Google 및 Google이 이용하는 광고 파트너의 정책이 적용될 수 있습니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-consent">
+            <h2 id="pp-consent">광고 및 개인정보 보호에 관한 동의</h2>
+            <p>본 앱은 Google User Messaging Platform(UMP)을 사용합니다.</p>
+            <p>유럽경제지역(EEA), 영국, 스위스, 미국 일부 주 및 관련 법률 또는 Google의 요구사항에 따라 필요한 기타 지역에서는 광고 및 개인정보 이용에 관한 동의 또는 개인정보 보호 안내 화면이 표시될 수 있습니다.</p>
+            <p>이용자는 표시된 화면에서 제공되는 선택 사항에 따라 광고 및 개인정보의 이용에 관한 선택을 할 수 있습니다.</p>
+            <p>또한 관련 법률 또는 Google의 요구사항에 따라 필요한 경우, 본 앱 내에 제공되는 개인정보 보호 설정 또는 이와 유사한 옵션을 통해 이전에 선택한 내용을 확인하거나 변경할 수 있습니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-adid">
+            <h2 id="pp-adid">광고 식별자</h2>
+            <p>본 앱에서는 광고 제공 및 광고 효과 측정 등을 위해 기기의 광고 식별자가 사용될 수 있습니다.</p>
+            <p>Android에서는 이용자가 기기 설정을 통해 광고 ID를 재설정하거나 삭제할 수 있는 경우가 있습니다.</p>
+            <p>iOS에서는 Apple의 App Tracking Transparency(ATT)가 적용되는 경우 필요한 때 이용자에게 추적 권한을 요청합니다.</p>
+            <p>이용자가 권한을 허용하지 않은 경우 IDFA 등 추적 권한이 필요한 식별 정보는 사용할 수 없으며, 이용 가능한 정보가 제한된 상태에서 광고가 제공될 수 있습니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-third-party">
+            <h2 id="pp-third-party">제3자 서비스 및 데이터 공유</h2>
+            <p>본 앱은 광고 제공, 광고 효과 측정, 서비스 개선 및 부정 이용 방지 등의 목적으로 Google AdMob 등의 제3자 서비스를 사용합니다.</p>
+            <p>이러한 제3자 서비스에 의한 데이터의 수집, 이용, 저장 및 기타 처리는 각 서비스 제공업체의 개인정보 처리방침에 따릅니다.</p>
+            <p>현재 사용하는 주요 제3자 서비스:</p>
+            <!-- Add Firebase / Unity Analytics etc. here and in the text only if actually integrated (not integrated as of 2026-10-13) -->
+            <ul>
+              <li>Google AdMob / Google Mobile Ads SDK (Google LLC)</li>
+              <li>Google User Messaging Platform (Google LLC)</li>
+            </ul>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-security">
+            <h2 id="pp-security">데이터 보안</h2>
+            <p>Google Mobile Ads SDK를 통해 전송되는 데이터는 Google의 사양에 따라 전송 과정에서 암호화됩니다.</p>
+            <p>당사는 사용하는 외부 서비스의 설정과 제공 내용을 필요에 따라 확인하고 이용자 정보를 적절하게 처리하기 위해 노력합니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-account">
+            <h2 id="pp-account">이용자 계정 및 당사가 저장하는 개인정보</h2>
+            <!-- Rewrite this section if an account registration / login / profile feature is ever implemented -->
+            <p>본 앱은 당사가 독자적으로 제공하는 이용자 계정 등록을 요구하지 않습니다.</p>
+            <p>또한 본 앱은 성명, 주소, 전화번호 등의 정보를 당사가 직접 운영하는 서버에 등록하는 기능을 제공하지 않습니다.</p>
+          </section>
+
+          <!--
+            TODO (for the site owner; not shown on the public page): add a "Children’s Privacy" section here
+            at the same time as the Japanese version (see the comment in /privacy/index.html). Same form as the other sections:
+            <section class="page__section policy__section" aria-labelledby="pp-children">
+              <h2 id="pp-children">…</h2>
+              <p>…</p>
+            </section>
+          -->
+
+          <section class="page__section policy__section" aria-labelledby="pp-changes">
+            <h2 id="pp-changes">개인정보 처리방침의 변경</h2>
+            <p>당사는 이용하는 서비스, 관련 법률, 본 앱의 기능 또는 기타 상황의 변화에 따라 본 개인정보 처리방침을 변경할 수 있습니다.</p>
+            <p>중요한 변경 사항이 있는 경우 본 페이지 또는 기타 적절한 방법을 통해 안내합니다.</p>
+            <p>변경된 개인정보 처리방침은 본 페이지에 게시된 시점부터 적용됩니다.</p>
+          </section>
+
+          <section class="page__section policy__section" aria-labelledby="pp-contact">
+            <h2 id="pp-contact">문의</h2>
+            <p>본 개인정보 처리방침에 관한 문의는 아래 연락처로 부탁드립니다.</p>
+            <dl class="policy__meta">
+              <div>
+                <dt>운영자</dt>
+                <dd>Mijinko Works</dd>
+              </div>
+              <div>
+                <dt>문의</dt>
+                <dd><a href="mailto:contact@mijinkoworks.com">이메일로 문의하기</a></dd>
+              </div>
+            </dl>
+          </section>
+
+          <dl class="policy__meta policy__dates">
+            <div>
+              <dt>제정일</dt>
+              <dd><time datetime="2026-10-03">2026년 10월 3일</time></dd>
+            </div>
+            <div>
+              <dt>최종 업데이트</dt>
+              <dd><time datetime="2026-10-13">2026년 10월 13일</time></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <nav class="site-footer__nav" aria-label="푸터 내비게이션">
+        <a href="./" aria-current="page">Privacy Policy</a>
+      </nav>
+      <p class="site-footer__copy">
+        &copy; <span class="js-year">2026</span> Mijinko Works
+      </p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js" defer></script>
+</body>
+</html>

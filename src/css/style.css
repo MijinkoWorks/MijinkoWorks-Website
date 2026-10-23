@@ -1,0 +1,1161 @@
+/* ==========================================================================
+   Mijinko Works Official Website - style.css
+   モノクロ基調 / アクセント1色 / システムフォントのみ（Webフォント不使用）
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   企業カラー決定後は --color-accent だけ変更すれば全体に反映される。
+   -------------------------------------------------------------------------- */
+:root {
+  --color-background: #FFFFFF;
+  --color-text: #111111;
+  --color-text-secondary: #4A4A4A;
+  --color-border: #E5E5E5;
+  --color-surface: #F5F5F5;
+  --color-button: #111111;
+  --color-button-text: #FFFFFF;
+  --color-accent: #63C7E8;
+
+  /* システムフォント（Webフォント読み込み前・未対応文字のフォールバック） */
+  --font-fallback: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", Meiryo, sans-serif;
+  /* サイト全体: Kiwi Maru（Medium 1ウェイト。css/fonts.css で @font-face 定義） */
+  --font-family: "Kiwi Maru", var(--font-fallback);
+
+  --container-max: 1200px;
+  --container-narrow: 780px; /* Privacy Policy の本文幅（長文の可読性のため 2026-10-13 に 720→780） */
+  --gutter: 20px;
+  --section-space: 64px;
+  --header-height: 64px;
+  --radius: 6px;
+
+  /* 段ボール素材（ヘッダー / フッター）。画像は assets/bg/ の半分サイズ版をタイル表示する */
+  --cardboard-edge-header: 14px; /* ヘッダー下端の波形断面の高さ */
+  --cardboard-edge-footer: 16px; /* フッター上端の波形断面の高さ */
+  --color-on-cardboard: #1F1A12; /* 段ボール上の文字色（濃い焦げ茶寄りの黒） */
+  --color-on-cardboard-muted: #4A3F2E;
+}
+
+/* Privacy Policy ページのみ Noto Sans JP（可変フォント wght 400〜700） */
+body.page-privacy {
+  --font-family: "Noto Sans JP", var(--font-fallback);
+  font-weight: 500; /* Noto Sans JP は可変フォントなので本文を Medium に */
+  -webkit-text-stroke: 0; /* 本物のウェイトがあるので擬似的な太らせは不要 */
+}
+
+/* 日本語以外のページの本文フォント（いずれも Regular 1ウェイト。css/fonts.css で @font-face 定義）。
+   Privacy ページも含めてその言語のページはすべてこのフォント。Kiwi Maru と同様に線を少し太らせる
+   - /en/    … Nunito Sans
+   - /zh-cn/ … Noto Sans SC（简体中文）
+   - /zh-tw/ … Noto Sans TC（繁體中文）
+   - /ko/    … Noto Sans KR（한국어）
+   対応表は _MijinkoWorksShared\Localization\README.md（ゲームと同じ組み合わせ） */
+body.lang-en,
+body.lang-en.page-privacy {
+  --font-family: "Nunito Sans", var(--font-fallback);
+}
+
+body.lang-zh-cn,
+body.lang-zh-cn.page-privacy {
+  --font-family: "Noto Sans SC", var(--font-fallback);
+}
+
+body.lang-zh-tw,
+body.lang-zh-tw.page-privacy {
+  --font-family: "Noto Sans TC", var(--font-fallback);
+}
+
+body.lang-ko,
+body.lang-ko.page-privacy {
+  --font-family: "Noto Sans KR", var(--font-fallback);
+  word-break: keep-all; /* 韓国語は単語（分かち書き）の途中で改行しない */
+  overflow-wrap: anywhere;
+}
+
+body.lang-en,
+body.lang-zh-cn,
+body.lang-zh-tw,
+body.lang-ko {
+  font-weight: 400;
+  -webkit-text-stroke: 0.3px currentColor;
+}
+
+/* 言語を切り替えても位置・見た目が動かないように、各言語で同じ文言の共通UIは常に Kiwi Maru にそろえる。
+   - ヘッダー（ナビ・言語切り替えの枠）とフッターは全ページ共通（Privacy ページも含む）
+   - 見出し（Games / About …）・ステータス・SNS名は英語表記のまま全言語で Kiwi Maru
+   各言語の本文（キャッチコピー・ゲーム説明・About・Privacy 本文）だけがその言語のフォントになる */
+.site-header,
+.site-footer,
+.section__title,
+.game-card__status,
+.social-link__name,
+.social-link__handle {
+  font-family: "Kiwi Maru", var(--font-fallback);
+  -webkit-text-stroke: 0.3px currentColor;
+}
+
+/* 言語切り替えの中の言語名は、その言語のフォントで出す（日本語・English は Kiwi Maru）。
+   各フォントの -names.woff2（言語名の文字だけ・数KB）が unicode-range で読まれる */
+.lang-switch [lang="zh-CN"] { font-family: "Noto Sans SC", var(--font-fallback); }
+.lang-switch [lang="zh-TW"] { font-family: "Noto Sans TC", var(--font-fallback); }
+.lang-switch [lang="ko"] { font-family: "Noto Sans KR", var(--font-fallback); }
+
+/* Privacy Policy ページのみ、紙の背景を別素材（assets/bg/paper-privacy）に差し替える。段ボールのヘッダー・フッターは共通 */
+body.page-privacy {
+  background-image: url("../assets/bg/paper-privacy.jpg");
+  background-image: image-set(
+    url("../assets/bg/paper-privacy.webp") type("image/webp"),
+    url("../assets/bg/paper-privacy.jpg") type("image/jpeg")
+  );
+  background-size: 1024px auto;
+}
+
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--color-text);
+  /* Kiwi Maru は Medium 1ウェイトしか使わないため、細い線を少し太らせて全体を力強くする */
+  -webkit-text-stroke: 0.3px currentColor;
+  paint-order: stroke fill;
+  /* ページ全体の下地: しわのある白紙（assets/bg/paper-light）。読み込み前は単色 */
+  background-color: var(--color-background);
+  background-image: url("../assets/bg/paper-light.jpg");
+  background-image: image-set(
+    url("../assets/bg/paper-light.webp") type("image/webp"),
+    url("../assets/bg/paper-light.jpg") type("image/jpeg")
+  );
+  background-repeat: repeat;
+  background-size: 1024px auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+/* hover は色を変えず、太めの黒い線で示す */
+a:hover {
+  color: inherit;
+  text-decoration-thickness: 3px;
+}
+
+/* focus状態は消さない（キーボード操作のため） */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* セクションへスクロールした際に固定ヘッダーへ隠れないようにする */
+[id] {
+  scroll-margin-top: calc(var(--header-height) + var(--cardboard-edge-header) + 16px);
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout helpers
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+.section {
+  padding: var(--section-space) 0;
+}
+
+/* --- About / Contact: 白い紙（body と同じ paper-light）の上にガムテープを1本貼り、その上に内容を載せる ---
+   テープは上下中央に置き、上下にはみ出た部分に紙が見える */
+.section--tape {
+  position: relative;
+  /* テープの上下に紙が十分見えるよう、通常のセクションより少し余白を足す */
+  padding: calc(var(--section-space) + 20px) 0;
+  color: var(--color-on-cardboard);
+  background-color: transparent; /* 紙は body の背景をそのまま見せる */
+  background-repeat: no-repeat;
+  background-position: center;
+  /* 幅100%・縦横比維持。ただし画像の実寸（1400px）より狭い画面では 1400px 幅のまま左右を切る
+     （テープの高さを約290pxに保ち、見出しから本文までがテープの上に収まるようにする） */
+  background-size: max(100%, 1400px) auto;
+}
+
+.section--tape-01 {
+  background-image: url("../assets/deco/packing-tape-01.png");
+  background-image: image-set(url("../assets/deco/packing-tape-01.webp") type("image/webp"), url("../assets/deco/packing-tape-01.png") type("image/png"));
+}
+
+.section--tape-02 {
+  background-image: url("../assets/deco/packing-tape-02.png");
+  background-image: image-set(url("../assets/deco/packing-tape-02.webp") type("image/webp"), url("../assets/deco/packing-tape-02.png") type("image/png"));
+}
+
+.section--tape a:focus-visible {
+  outline-color: var(--color-on-cardboard);
+}
+
+.section__title {
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 32px;
+}
+
+/* PCのみ改行させる */
+.br-pc {
+  display: none;
+}
+
+/* スキップリンク（フォーカス時のみ表示） */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  padding: 8px 12px;
+  background: var(--color-button);
+  color: var(--color-button-text);
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   3b. Intro（ロゴGIFアニメーション）
+   ページ全体を白で覆い、GIF再生後に js/main.js がフェードアウトして取り除く。
+   -------------------------------------------------------------------------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+  cursor: pointer;
+  /* 白い画面からホームページが現れる時間。js/main.js が上書きする（通常 0.5秒） */
+  transition: opacity 0.5s ease;
+}
+
+/* 段階1: ロゴだけがゆっくり消える（背景の白はそのまま） */
+.intro.is-hiding .intro__stage {
+  opacity: 0;
+}
+
+.intro.is-hiding {
+  pointer-events: none;
+}
+
+.intro.is-hiding .intro__skip {
+  opacity: 0;
+}
+
+/* 段階2: ロゴが完全に消えたあと、白い画面を外してホームページを表示 */
+.intro.is-done {
+  opacity: 0;
+}
+
+/* GIF（1021x198）。スマホでは画面幅の約85%、PCでは最大640pxまで */
+.intro__stage {
+  position: relative;
+  width: min(640px, 85vw);
+  /* ロゴが消えていく時間。js/main.js が上書きする（通常 1.8秒 / スキップ時 0.3秒） */
+  transition: opacity 1.8s ease-out;
+}
+
+.intro__logo {
+  width: 100%;
+  height: auto;
+}
+
+/*
+  最終フレームの静止画をGIFと同じ位置に重ねておき、再生中は非表示にする。
+  GIFは背景が透明なので、静止画を先に見せてしまうと再生中ずっと完成ロゴが
+  透けて「静止画に見える」ため、visibility で確実に隠す。
+*/
+.intro__logo--end {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.intro__logo--gif {
+  position: relative;
+}
+
+/* フェード開始時にGIFと静止画を同時に入れ替える（絵は同じなので切り替えは見えない） */
+.intro.is-frozen .intro__logo--gif {
+  visibility: hidden;
+}
+
+.intro.is-frozen .intro__logo--end {
+  visibility: visible;
+}
+
+.intro__skip {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.intro__skip:hover {
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
+}
+
+/* イントロ表示中は背後のページをスクロールさせない */
+html.is-intro {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro,
+  .intro__stage {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Header
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  color: var(--color-on-cardboard);
+  /* 段ボール板（上）＋波形の切断面（下端）。横にタイル、下端揃え。背景色は画像読み込み前の下地 */
+  /* 2層目の単色グラデーションは画像読み込み前の下地（断面の透明部分には敷かない） */
+  background-image:
+    url("../assets/bg/cardboard-header.png"),
+    linear-gradient(#C9A46B, #C9A46B);
+  background-image:
+    image-set(
+      url("../assets/bg/cardboard-header.webp") type("image/webp"),
+      url("../assets/bg/cardboard-header.png") type("image/png")
+    ),
+    linear-gradient(#C9A46B, #C9A46B);
+  background-repeat: repeat-x, no-repeat;
+  background-position: center bottom, center top;
+  background-size: auto 243px, 100% calc(100% - var(--cardboard-edge-header));
+  /* 波形断面の下は透明なので、その分だけ下に余白を取り本文側へはみ出させない */
+  padding-bottom: var(--cardboard-edge-header);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  min-height: var(--header-height);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* ヘッダーはアイコン（355x392・ほぼ正方形）。高さ基準で縮小し、幅は比率に従う */
+.site-logo img {
+  height: 36px;
+  width: auto;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+/* スマホでもタップしやすいよう上下の余白を確保する */
+.site-nav__list a {
+  display: inline-block;
+  padding: 8px 0;
+  font-size: 1.0625rem;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.site-nav__list a:hover {
+  color: var(--color-on-cardboard);
+  border-bottom-color: var(--color-on-cardboard);
+}
+
+.site-header a:focus-visible {
+  outline-color: var(--color-on-cardboard);
+}
+
+/* --- 言語切り替え（日本語 / English / 简体中文 / 繁體中文 / 한국어）---
+   ヘッダー右端。<details> で作ったプルダウン。閉じているときは現在の言語（国旗＋言語名）だけを表示し、
+   押すと一覧が下に開く（JavaScript 無しでも開閉できる。外側クリック / Esc で閉じるのは js/main.js）。
+   国旗は assets/flags/*.svg（flag-icons）。言語と旗は 1 対 1 ではないので言語名を必ず併記する。
+   600px 未満: 1行目にアイコンと言語切り替え、2行目にナビ。600px 以上: アイコン｜ナビ｜言語切り替え の1行 */
+.lang-switch {
+  position: relative;
+  margin-left: auto;
+}
+
+.lang-switch__current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  /* 言語名の長さ（日本語 / English / 简体中文 …）が違っても幅を固定し、ナビの位置が言語で動かないようにする */
+  min-width: 112px;
+  padding: 8px 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  list-style: none; /* 既定の ▶ マーカーを消す */
+  border-bottom: 3px solid transparent;
+}
+
+.lang-switch__current::-webkit-details-marker {
+  display: none;
+}
+
+.lang-switch__current:hover,
+.lang-switch[open] .lang-switch__current {
+  border-bottom-color: var(--color-on-cardboard);
+}
+
+.lang-switch__current:focus-visible {
+  outline: 2px solid var(--color-on-cardboard);
+  outline-offset: 3px;
+}
+
+/* 開閉を示す小さな三角（CSS だけで描く） */
+.lang-switch__chevron {
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+}
+
+.lang-switch[open] .lang-switch__chevron {
+  border-top: 0;
+  border-bottom: 5px solid currentColor;
+}
+
+/* 一覧: 現在の言語の下に、紙の色のパネルで開く */
+.lang-switch__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 20;
+  min-width: 180px;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.lang-switch__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.lang-switch__link:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+/* 現在の言語: 本文リンクのホバーと同じ太めの黒い下線 */
+.lang-switch__link[aria-current="page"] span {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.3em;
+}
+
+.lang-switch__flag {
+  flex: none;
+  width: 22px;
+  height: auto;
+  border-radius: 2px;
+  /* 白地の国旗（日本）が背景に溶けないよう薄い縁を付ける */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 599px) {
+  .site-nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  .site-nav {
+    margin-left: auto;
+  }
+
+  .lang-switch {
+    margin-left: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero
+   -------------------------------------------------------------------------- */
+.hero {
+  padding: 72px 0;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero__title {
+  display: flex;
+  justify-content: center;
+}
+
+/* ロゴ画像（960x171）。スマホでは画面幅の約85%、PCでは最大560pxまで */
+.hero__logo {
+  width: min(560px, 85vw);
+  height: auto;
+}
+
+.hero__lead {
+  margin-top: 24px;
+  font-size: 1.125rem;
+}
+
+.hero__sub {
+  margin-top: 8px;
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   6. Games
+   -------------------------------------------------------------------------- */
+/* 1列表示（〜767px）ではカードが広く、右上のテープが回転して画面端より外に数px はみ出し、
+   横スクロールが発生する。セクション単位で横方向だけクリップして防ぐ（clip はスクロール領域を作らない） */
+.section--games {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.game-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.game-card {
+  position: relative; /* テープ（将来のゴム印も）の基準 */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-background);
+}
+
+/* --- マスキングテープ（装飾）---
+   画像の上辺を左右2か所で紙に貼っているように見せる。
+   画像より手前・クリックは透過。角度と絵柄は :nth-child で固定パターン（JSで乱数にはしない） */
+.game-card__tape {
+  position: absolute;
+  z-index: 2;
+  top: -4%;
+  width: 34%;
+  aspect-ratio: 378 / 114;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+}
+
+.game-card__tape--left {
+  left: -5%;
+  transform: rotate(-7deg);
+}
+
+.game-card__tape--right {
+  right: -5%;
+  transform: rotate(5deg);
+}
+
+/* 絵柄（4種類を使い回す） */
+.game-card:nth-child(3n + 1) .game-card__tape--left,
+.game-card:nth-child(3n + 3) .game-card__tape--right {
+  background-image: url("../assets/deco/masking-tape-a.png");
+  background-image: image-set(url("../assets/deco/masking-tape-a.webp") type("image/webp"), url("../assets/deco/masking-tape-a.png") type("image/png"));
+}
+
+.game-card:nth-child(3n + 2) .game-card__tape--left {
+  background-image: url("../assets/deco/masking-tape-b.png");
+  background-image: image-set(url("../assets/deco/masking-tape-b.webp") type("image/webp"), url("../assets/deco/masking-tape-b.png") type("image/png"));
+  aspect-ratio: 390 / 134;
+}
+
+.game-card:nth-child(3n + 1) .game-card__tape--right,
+.game-card:nth-child(3n + 3) .game-card__tape--left {
+  background-image: url("../assets/deco/masking-tape-c.png");
+  background-image: image-set(url("../assets/deco/masking-tape-c.webp") type("image/webp"), url("../assets/deco/masking-tape-c.png") type("image/png"));
+  aspect-ratio: 350 / 122;
+}
+
+.game-card:nth-child(3n + 2) .game-card__tape--right {
+  background-image: url("../assets/deco/masking-tape-d.png");
+  background-image: image-set(url("../assets/deco/masking-tape-d.webp") type("image/webp"), url("../assets/deco/masking-tape-d.png") type("image/png"));
+  aspect-ratio: 354 / 128;
+}
+
+/* 角度の揺らぎ（カードごとに少しずつ違える） */
+.game-card:nth-child(3n + 2) .game-card__tape--left  { transform: rotate(-4deg); }
+.game-card:nth-child(3n + 2) .game-card__tape--right { transform: rotate(8deg); }
+.game-card:nth-child(3n + 3) .game-card__tape--left  { transform: rotate(-9deg); }
+.game-card:nth-child(3n + 3) .game-card__tape--right { transform: rotate(3deg); }
+
+/* ゲーム画像を主役にするため正方形で大きく確保する */
+.game-card__media {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-card__media picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.game-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-card__placeholder {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.game-card__body {
+  padding: 20px;
+}
+
+.game-card__title {
+  font-size: 1.5rem;
+}
+
+.game-card__desc {
+  margin-top: 8px;
+  min-height: 3.6em; /* 2行分（line-height 1.8 × 2）。説明が1行の言語でもカードの高さが変わらないようにする */
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+}
+
+/* ステータス: 色だけで表現せず、テキストで判別できる */
+.game-card__status {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 3px 12px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--color-text);
+  border-radius: 999px;
+}
+
+.game-card__status[data-status="coming-soon"] {
+  border-color: var(--color-accent);
+}
+
+.game-card__status[data-status="available"] {
+  background-color: var(--color-button);
+  color: var(--color-button-text);
+}
+
+/* 将来ストアリンクを追加する際のボタンスタイル（現時点では未使用） */
+.game-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.button {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-button-text);
+  background-color: var(--color-button);
+  border: 1px solid var(--color-button);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.button:hover {
+  color: var(--color-button-text);
+  box-shadow: 0 0 0 3px var(--color-text);
+}
+
+/* --------------------------------------------------------------------------
+   7. About
+   -------------------------------------------------------------------------- */
+.about__text {
+  font-size: 1.1875rem;
+}
+
+.about__text + .about__text {
+  margin-top: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Social
+   -------------------------------------------------------------------------- */
+.social-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* 狭い画面ではアイコンの右に「サービス名 / ハンドル」を縦に並べ、ハンドルが途中で折れないようにする。
+   広い画面（1024px〜）では 1行（アイコン・名前・右端にハンドル） */
+.social-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon name"
+    "icon handle";
+  align-items: center;
+  column-gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.social-link__icon { grid-area: icon; }
+.social-link__name { grid-area: name; align-self: end; }
+.social-link__handle { grid-area: handle; align-self: start; }
+
+/* ホバー中は白黒を反転（カード・アイコン・文字すべて） */
+.social-link:hover {
+  color: var(--color-button-text);
+  background-color: var(--color-button);
+  border-color: var(--color-button);
+}
+
+.social-link:hover .social-link__icon {
+  color: var(--color-button);
+  background-color: var(--color-button-text);
+}
+
+.social-link:hover .social-link__icon img {
+  filter: invert(1); /* 白抜きアイコンを黒に */
+}
+
+.social-link:hover .social-link__handle {
+  color: var(--color-button-text);
+}
+
+/* アイコン領域（公式アイコン配置までは文字で代用） */
+.social-link__icon {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-button-text);
+  background-color: var(--color-button);
+  border-radius: 50%;
+}
+
+.social-link__icon img {
+  width: 22px;
+  height: 22px;
+}
+
+.social-link__name {
+  font-weight: 700;
+}
+
+.social-link__handle {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 359px) {
+  .social-link__handle {
+    font-size: 0.8125rem; /* 320px 級の端末で bsky.social のハンドルが折れないように */
+  }
+}
+
+@media (min-width: 1024px) {
+  .social-link {
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: "icon name handle";
+  }
+
+  .social-link__name,
+  .social-link__handle {
+    align-self: center;
+  }
+
+  .social-link__handle {
+    font-size: 1rem;
+    text-align: right;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. Contact
+   -------------------------------------------------------------------------- */
+.contact__text {
+  font-size: 1.1875rem;
+}
+
+.contact__mail {
+  margin-top: 16px;
+}
+
+/* メールアイコン（白抜き）。SNSのアイコンと同じ黒丸バッジで統一する。
+   アドレス文字はページ上に表示しない（href の mailto: と aria-label のみ） */
+.contact__mail-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: var(--color-button);
+  border-radius: 50%;
+  border: 1px solid var(--color-button);
+}
+
+.contact__mail-link img {
+  width: 32px;
+  height: 32px;
+}
+
+.contact__mail-link:hover {
+  box-shadow: 0 0 0 3px var(--color-on-cardboard);
+}
+
+/* --------------------------------------------------------------------------
+   10. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  padding: calc(32px + var(--cardboard-edge-footer)) 0 32px;
+  font-size: 1rem;
+  color: var(--color-on-cardboard-muted);
+  /* 波形の切断面（上端）＋段ボール板（下）。横にタイル、上端揃え */
+  background-image:
+    url("../assets/bg/cardboard-footer.png"),
+    linear-gradient(#C9A46B, #C9A46B);
+  background-image:
+    image-set(
+      url("../assets/bg/cardboard-footer.webp") type("image/webp"),
+      url("../assets/bg/cardboard-footer.png") type("image/png")
+    ),
+    linear-gradient(#C9A46B, #C9A46B);
+  background-repeat: repeat-x, no-repeat;
+  background-position: center top, center bottom;
+  background-size: auto 187px, 100% calc(100% - var(--cardboard-edge-footer));
+}
+
+.site-footer a {
+  color: var(--color-on-cardboard);
+}
+
+.site-footer a:hover {
+  color: var(--color-on-cardboard);
+}
+
+.site-footer a:focus-visible {
+  outline-color: var(--color-on-cardboard);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.site-footer__nav a {
+  display: inline-block;
+  padding: 8px 0;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.site-footer__nav a:hover {
+  border-bottom-color: var(--color-on-cardboard);
+}
+
+/* --------------------------------------------------------------------------
+   11. Privacy Policy page
+   -------------------------------------------------------------------------- */
+.page {
+  padding: 48px 0 var(--section-space);
+}
+
+.page__title {
+  font-size: 2.25rem;
+  margin-bottom: 8px;
+}
+
+.page__updated {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+}
+
+.page__section + .page__section {
+  margin-top: 32px;
+}
+
+.page__section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.page__section p + p {
+  margin-top: 8px;
+}
+
+.notice {
+  padding: 16px 20px;
+  background-color: var(--color-surface);
+  border-left: 4px solid var(--color-accent);
+  margin-bottom: 32px;
+}
+
+/* プライバシーポリシー本文 */
+.policy {
+  counter-reset: policy-section;
+}
+
+.policy__lead {
+  margin-bottom: 40px;
+}
+
+/* 翻訳版（日本語以外）の注記「日本語版が正式な文書で、相違があれば日本語版が優先」。lead の直後に置く。
+   日本語版には付けない。読み飛ばされないよう本文と同じ色で、左に細い罫線 */
+.policy__note {
+  margin: -24px 0 40px;
+  padding-left: 14px;
+  border-left: 3px solid var(--color-text);
+  font-size: 0.9375rem;
+}
+
+/* 章番号は自動採番（章の追加・挿入で手動の振り直しが不要） */
+.policy__section h2 {
+  counter-increment: policy-section;
+}
+
+.policy__section h2::before {
+  content: counter(policy-section) ". ";
+}
+
+.policy__section ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+
+.policy__section li + li {
+  margin-top: 4px;
+}
+
+.policy__section p + ul,
+.policy__section ul + p {
+  margin-top: 8px;
+}
+
+.policy__meta {
+  margin: 8px 0 0;
+}
+
+.policy__meta div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.policy__meta div + div {
+  margin-top: 4px;
+}
+
+.policy__meta dt {
+  flex: 0 0 7em;
+  color: var(--color-text-secondary);
+}
+
+.policy__meta dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.policy__dates {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border);
+  font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   12. Responsive
+   375px（スマホ）を基準に、768px / 1024px で拡張する。
+   -------------------------------------------------------------------------- */
+/* スマホ幅では 1行目「アイコン ＋ 言語切り替え（右端）」、2行目「ナビ（横一列）」の2段にする（.site-nav の order / flex-basis は 4. Header 参照） */
+@media (max-width: 599px) {
+  .site-header__inner {
+    align-items: center;
+    gap: 0 16px;
+  }
+
+  .site-nav__list {
+    gap: 0 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+    --section-space: 88px;
+  }
+
+  body {
+    font-size: 18px;
+  }
+
+  .br-pc {
+    display: inline;
+  }
+
+  .site-logo img {
+    height: 40px;
+  }
+
+  .section__title {
+    font-size: 2.375rem;
+    margin-bottom: 40px;
+  }
+
+  .hero {
+    padding: 104px 0;
+  }
+
+  .hero__lead {
+    font-size: 1.375rem;
+  }
+
+  .game-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .social-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 40px;
+    --section-space: 104px;
+  }
+
+  .hero {
+    padding: 128px 0;
+  }
+
+  .game-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}

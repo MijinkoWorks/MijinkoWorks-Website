@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mijinko Works</title>
+  <meta name="description" content="Mijinko Works is an indie game development project making games for smartphones and PC.">
+  <link rel="canonical" href="https://mijinkoworks.com/en/">
+  <!-- 言語別ページ。x-default は日本語 / Language versions; x-default is Japanese -->
+  <link rel="alternate" hreflang="ja" href="https://mijinkoworks.com/">
+  <link rel="alternate" hreflang="en" href="https://mijinkoworks.com/en/">
+  <link rel="alternate" hreflang="zh-CN" href="https://mijinkoworks.com/zh-cn/">
+  <link rel="alternate" hreflang="zh-TW" href="https://mijinkoworks.com/zh-tw/">
+  <link rel="alternate" hreflang="ko" href="https://mijinkoworks.com/ko/">
+  <link rel="alternate" hreflang="x-default" href="https://mijinkoworks.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mijinko Works">
+  <meta property="og:title" content="Mijinko Works">
+  <meta property="og:description" content="Mijinko Works is an indie game development project making games for smartphones and PC.">
+  <meta property="og:url" content="https://mijinkoworks.com/en/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:locale:alternate" content="zh_TW">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <!-- Share thumbnail (1200x630, assets/logo/og-image.jpg). Must be an absolute URL, so it assumes the production domain -->
+  <meta property="og:image" content="https://mijinkoworks.com/assets/logo/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon (browser tab): same source icon as the header -->
+  <link rel="icon" type="image/png" href="../assets/icons/Mijinko%20Works%20Icon.png">
+  <!-- Home screen / desktop icons and web app manifest -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/app/apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <meta name="theme-color" content="#C9A46B">
+
+  <!-- Web font (Nunito Sans, English pages only): core contains just the characters on this page, so preload it -->
+  <link rel="preload" href="../assets/fonts/nunito-sans-core.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="lang-en">
+  <!--
+    Intro (animated logo GIF)
+    - Controlled by js/main.js (plays once, then slowly fades out / click or Esc skips it / shown once per session)
+    - The GIF loops, so a still image identical to the last frame (_end.png) sits underneath and
+      replaces the GIF when the fade starts (no visible change)
+    - Hidden via noscript CSS when JavaScript is off, so the page is readable as-is
+    - Also not shown when the OS "reduce motion" setting is on
+  -->
+  <noscript><style>.intro { display: none; }</style></noscript>
+  <div class="intro" id="intro" role="dialog" aria-label="Mijinko Works intro">
+    <div class="intro__stage">
+      <img class="intro__logo intro__logo--end" src="../assets/logo/Mijinko_Works_Logo_Animation_end.png" alt="" width="1021" height="198" aria-hidden="true">
+      <img class="intro__logo intro__logo--gif" src="../assets/logo/Mijinko_Works_Logo_Animation.gif" alt="Mijinko Works" width="1021" height="198">
+    </div>
+    <button class="intro__skip" type="button">Skip</button>
+  </div>
+  <script>
+    /* Decide before first paint: no intro on repeat visits in this session or when "reduce motion" is on (see js/main.js) */
+    (function () {
+      var intro = document.getElementById('intro');
+      var seen = false;
+      try { seen = sessionStorage.getItem('mw-intro-seen') === '1'; } catch (e) {}
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (seen || reduce) {
+        intro.parentNode.removeChild(intro);
+      } else {
+        document.documentElement.classList.add('is-intro');
+      }
+    })();
+  </script>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="./" aria-label="Mijinko Works home">
+        <img src="../assets/icons/mijinko-works-icon-transparent.png" alt="Mijinko Works" width="355" height="392">
+      </a>
+      <nav class="site-nav" aria-label="Site navigation">
+        <ul class="site-nav__list">
+          <li><a href="#games">Games</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#social">Social</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <!-- 言語切り替え: ヘッダーには現在の言語だけを出し、押すと一覧（国旗＋言語名）が開く。JavaScript 無しでも <details> で動く。
+           国旗（flag-icons・MIT）は必ず言語名と併記する（言語と旗は 1 対 1 ではない） -->
+      <details class="lang-switch">
+        <summary class="lang-switch__current" aria-label="言語 / Language"><img class="lang-switch__flag" src="../assets/flags/us.svg" alt="" width="640" height="480"><span lang="en">English</span><span class="lang-switch__chevron" aria-hidden="true"></span></summary>
+        <ul class="lang-switch__list">
+          <li><a class="lang-switch__link" href="../" lang="ja" hreflang="ja"><img class="lang-switch__flag" src="../assets/flags/jp.svg" alt="" width="640" height="480"><span>日本語</span></a></li>
+          <li><a class="lang-switch__link" href="./" lang="en" hreflang="en" aria-current="page"><img class="lang-switch__flag" src="../assets/flags/us.svg" alt="" width="640" height="480"><span>English</span></a></li>
+          <li><a class="lang-switch__link" href="../zh-cn/" lang="zh-CN" hreflang="zh-CN"><img class="lang-switch__flag" src="../assets/flags/cn.svg" alt="" width="640" height="480"><span>简体中文</span></a></li>
+          <li><a class="lang-switch__link" href="../zh-tw/" lang="zh-TW" hreflang="zh-TW"><img class="lang-switch__flag" src="../assets/flags/tw.svg" alt="" width="640" height="480"><span>繁體中文</span></a></li>
+          <li><a class="lang-switch__link" href="../ko/" lang="ko" hreflang="ko"><img class="lang-switch__flag" src="../assets/flags/kr.svg" alt="" width="640" height="480"><span>한국어</span></a></li>
+        </ul>
+      </details>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <h1 class="hero__title" id="hero-title">
+          <img class="hero__logo" src="../assets/logo/Mijinko_Works_logo_transparent.png" alt="Mijinko Works" width="960" height="171">
+        </h1>
+        <p class="hero__lead">We make games for smartphones and PC.</p>
+        <p class="hero__sub">Indie Game Developer from Japan.</p>
+      </div>
+    </section>
+
+    <!-- Games -->
+    <section class="section section--games" id="games" aria-labelledby="games-title">
+      <div class="container">
+        <h2 class="section__title" id="games-title">Games</h2>
+
+        <ul class="game-list">
+
+          <!-- Mijiname: Pond Frontier (ミジナメの池開拓記) -->
+          <li class="game-card">
+            <!-- Decoration: masking tape holding the picture on the paper (CSS background, angle fixed via :nth-child). Future rubber stamps go here as .game-card__stamp -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="../assets/games/mijiname-pond-frontier/icon.webp" type="image/webp">
+                <img src="../assets/games/mijiname-pond-frontier/icon.png" alt="Mijiname: Pond Frontier" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">Mijiname: Pond Frontier</h3>
+              <p class="game-card__desc">Draw lines of slime to claim territory in this action puzzle.</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: add store links after release (App Store / Google Play / Steam etc.). Never link to URLs that do not exist yet -->
+            </div>
+          </li>
+
+          <!-- Nekonarabe Gomoku (ねこならべ五目) -->
+          <li class="game-card">
+            <!-- Decoration: masking tape holding the picture on the paper (CSS background, angle fixed via :nth-child). Future rubber stamps go here as .game-card__stamp -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="../assets/games/neko-narabe-gomoku/icon.webp" type="image/webp">
+                <img src="../assets/games/neko-narabe-gomoku/icon.png" alt="Nekonarabe Gomoku" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <!-- TODO: English title, description and status are provisional; confirm once the game's official English name is decided -->
+              <h3 class="game-card__title">Nekonarabe Gomoku</h3>
+              <p class="game-card__desc">A simple five-in-a-row game with cats.</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: add store links after release (App Store / Google Play etc.). Never link to URLs that do not exist yet -->
+            </div>
+          </li>
+
+          <!-- Nekonarabe Reversi (ねこならべリバーシ) -->
+          <li class="game-card">
+            <!-- Decoration: masking tape holding the picture on the paper (CSS background, angle fixed via :nth-child). Future rubber stamps go here as .game-card__stamp -->
+            <span class="game-card__tape game-card__tape--left" aria-hidden="true"></span>
+            <span class="game-card__tape game-card__tape--right" aria-hidden="true"></span>
+            <div class="game-card__media">
+              <picture>
+                <source srcset="../assets/games/neko-narabe-reversi/icon.webp" type="image/webp">
+                <img src="../assets/games/neko-narabe-reversi/icon.png" alt="Nekonarabe Reversi" width="800" height="800" loading="lazy">
+              </picture>
+            </div>
+            <div class="game-card__body">
+              <!-- TODO: English title, description and status are provisional; confirm once the game's official English name is decided -->
+              <h3 class="game-card__title">Nekonarabe Reversi</h3>
+              <p class="game-card__desc">A simple game of Reversi with cats.</p>
+              <p class="game-card__status" data-status="in-development">In Development</p>
+              <!-- TODO: add store links after release (App Store / Google Play etc.). Never link to URLs that do not exist yet -->
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- About -->
+    <!-- About / Contact sit on top of a strip of packing tape (packing_tape_01 / 02) -->
+    <section class="section section--tape section--tape-01" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 class="section__title" id="about-title">About</h2>
+        <p class="about__text">
+          Mijinko Works is an indie game development project<br class="br-pc">
+          making games for smartphones and PC.
+        </p>
+        <p class="about__text">
+          Small games, made with care, that you can play to the very end.
+        </p>
+      </div>
+    </section>
+
+    <!-- Social -->
+    <section class="section" id="social" aria-labelledby="social-title">
+      <div class="container">
+        <h2 class="section__title" id="social-title">Social</h2>
+        <!-- Icons are Tabler Icons (brand-*) in white. The service name is always shown as text -->
+        <ul class="social-list">
+          <li>
+            <a class="social-link" href="https://x.com/MijinkoWorks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-x-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">X</span>
+              <span class="social-link__handle">@MijinkoWorks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.youtube.com/@MijinkoWorks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-youtube-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">YouTube</span>
+              <span class="social-link__handle">@MijinkoWorks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.instagram.com/mijinkoworks/" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-instagram-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Instagram</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.tiktok.com/@mijinkoworks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-tiktok-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">TikTok</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://www.threads.net/@mijinkoworks" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-threads-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Threads</span>
+              <span class="social-link__handle">@mijinkoworks</span>
+            </a>
+          </li>
+          <li>
+            <a class="social-link" href="https://bsky.app/profile/mijinkoworks.bsky.social" target="_blank" rel="noopener noreferrer">
+              <span class="social-link__icon"><img src="../assets/icons/brand-bluesky-white.png" alt="" width="240" height="240"></span>
+              <span class="social-link__name">Bluesky</span>
+              <span class="social-link__handle">@mijinkoworks.bsky.social</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section--tape section--tape-02" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <h2 class="section__title" id="contact-title">Contact</h2>
+        <p class="contact__text">Get in touch</p>
+        <p class="contact__mail">
+          <a class="contact__mail-link" href="mailto:contact@mijinkoworks.com" aria-label="Contact us by email">
+            <img src="../assets/icons/mail-white.png" alt="" width="240" height="240">
+          </a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <nav class="site-footer__nav" aria-label="Footer navigation">
+        <a href="privacy/">Privacy Policy</a>
+      </nav>
+      <p class="site-footer__copy">
+        &copy; <span class="js-year">2026</span> Mijinko Works
+      </p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js" defer></script>
+</body>
+</html>
